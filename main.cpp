@@ -40,11 +40,12 @@ int main() {
 
     // Суммирование через разделение на потоки
     lsum = 0;
+    vector<thread> ts;
     cl::time_point mt_begin = cl::now();
     for (int i = 0; i < N; i += M) {
-        thread t(part_sum, ref(list), i, i + M, ref(lsum));
-        t.join();
+        ts.emplace_back(part_sum, ref(list), i, i + M, ref(lsum));
     }
+    for (auto &t : ts) t.join();
     cl::time_point mt_end = cl::now();
 
     cout << "Sum is: " << lsum << endl;
