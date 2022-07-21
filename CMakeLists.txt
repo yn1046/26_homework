@@ -3,6 +3,7 @@ project(26_homework)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS -pthread)
+# set(CMAKE_CXX_FLAGS -fsanitize=thread)
 
 add_executable(26_homework main.cpp)
 
