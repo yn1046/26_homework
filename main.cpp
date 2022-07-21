@@ -9,8 +9,8 @@ using namespace std;
 namespace chr = std::chrono;
 using cl = chr::steady_clock;
 
-void part_sum(vector<int> &list, int from, int to, atomic<int> &lsum) {
-    int psum = 0;
+void part_sum(vector<int> &list, int from, int to, atomic<int64_t> &lsum) {
+    int64_t psum = 0;
     for (int i = from; i < to; ++i) psum += list[i];
 
     lsum += psum;
@@ -28,7 +28,7 @@ int main() {
     }
 
     // Суммирование без параллелизма
-    int lsum_seq = 0;
+    int64_t lsum_seq = 0;
     cl::time_point begin = cl::now();
     for (int i = 0; i < N; ++i) lsum_seq += list[i];
     cl::time_point end = cl::now();
@@ -39,7 +39,7 @@ int main() {
 
 
     // Суммирование через разделение на потоки
-    atomic<int> lsum = 0;
+    atomic<int64_t> lsum = 0;
     vector<thread> ts;
     cl::time_point mt_begin = cl::now();
     for (int i = 0; i < N; i += M) {
@@ -55,7 +55,7 @@ int main() {
     // Суммирование встроенной функцией reduce с параллельной политикой исполнения
     lsum = 0;
     cl::time_point reduce_begin = cl::now();
-    lsum = reduce(execution::par, list.cbegin(), list.cend());
+    lsum = reduce(execution::par, list.cbegin(), list.cend(), 0ull);
     cl::time_point reduce_end = cl::now();
 
     cout << "Sum is: " << lsum << endl;
